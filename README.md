@@ -81,3 +81,91 @@ User provides context              PostgreSQL
                                   Natural Language
                                      Response
 ```
+# 🏗️ Final Architecture
+```
+                         ┌───────────────────┐
+                         │       User        │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                     ┌─────────────────────────┐
+                     │  Clarification Engine   │
+                     │                         │
+                     │ Is the user's intent    │
+                     │ clear or ambiguous?     │
+                     └────────────┬────────────┘
+                                  │
+                       ┌──────────┴──────────┐
+                       │                     │
+                    Ambiguous              Clear
+                       │                     │
+                       ▼                     ▼
+              Ask clarification       Text-to-SQL
+                       │                     │
+                       │                     ▼
+                       │              SQL Validation
+                       │                     │
+                       │                     ▼
+                       │                PostgreSQL
+                       │                     │
+                       │                     ▼
+                       └──────────────►  Result
+                                             │
+                                             ▼
+                                      Final Response
+```
+#📁 Current Project Structure
+```
+text-to-sql-clarification-engine/
+│
+├── app/
+│   │
+│   ├── llm/
+│   │   ├── __init__.py
+│   │   ├── providers.py
+│   │   └── manager.py
+│   │
+│   ├── text_to_sql/
+│   │   ├── __init__.py
+│   │   ├── generator.py
+│   │   └── prompts.py
+│   │
+│   ├── database/
+│   │   ├── __init__.py
+│   │   └── connection.py
+│   │
+│   └── main.py
+│
+├── database/
+│   ├── schema.sql
+│   └── seed.py
+│
+├── tests/
+│
+├── docs/
+│
+├── .env
+├── .gitignore
+└── requirements.txt
+```
+### A Real Problem We Discovered
+A Real Problem We Discovered
+```Which customer has spent the most money?```
+The LLM initially generated:
+```
+SELECT c.nameFROM customers c....
+```
+PostgreSQL returned:
+```column c.name does not exist```
+Why?
+Because the actual database contains:
+first_name
+last_name
+
+instead of name,
+This exposed an important Text-to-SQL problem:
+### The LLM's understanding of the database schema must match the actual database schema.
+
+We fixed this by providing the actual database schema to the model.
+The prompt now explicitly tells the model:
+
