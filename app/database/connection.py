@@ -1,5 +1,4 @@
-from sqlalchemy import column, create_engine,text
-from sqlalchemy.engine import row
+from sqlalchemy import create_engine,text
 
 from config.env_variable import settings
 
