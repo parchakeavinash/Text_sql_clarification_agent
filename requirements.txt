@@ -1,0 +1,31 @@
+
+# API
+fastapi
+uvicorn[standard]
+
+# Database
+psycopg[binary]
+sqlalchemy
+
+# Data validation
+pydantic
+pydantic-settings
+
+# LLM
+# openai
+google-generativeai
+
+# Environment variables
+python-dotenv
+
+# SQL validation
+sqlglot
+
+# Data generation / testing
+faker
+pytest
+httpx
+
+# UI
+# streamlit
+
