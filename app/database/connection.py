@@ -1,0 +1,27 @@
+from sqlalchemy import column, create_engine,text
+from sqlalchemy.engine import row
+
+from config.env_variable import settings
+
+
+engine = create_engine(
+    settings.DATABASE_URL
+)
+
+
+def execute_query(sql:str):
+    with engine.connect() as connection:
+        result = connection.execute(text(sql))
+
+        print(result)
+
+        columns = result.keys()
+        print(columns)
+        print()
+        print()
+
+        return [
+
+            dict(zip(columns,row))
+            for row in result.fetchall()
+        ]
