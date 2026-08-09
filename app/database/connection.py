@@ -12,12 +12,7 @@ def execute_query(sql:str):
     with engine.connect() as connection:
         result = connection.execute(text(sql))
 
-        print(result)
-
         columns = result.keys()
-        print(columns)
-        print()
-        print()
 
         return [
 
