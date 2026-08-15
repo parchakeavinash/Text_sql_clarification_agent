@@ -169,3 +169,38 @@ This exposed an important Text-to-SQL problem:
 We fixed this by providing the actual database schema to the model.
 The prompt now explicitly tells the model:
 
+## end-to-end Text-to-SQL pipeline:
+```
+                    USER
+                     │
+                     │
+       "How many orders last month?"
+                     │
+                     ▼
+              ┌─────────────┐
+              │   Generator │
+              └──────┬──────┘
+                     │
+                     ▼
+              ┌─────────────┐
+              │ Groq /      │
+              │ Gemini      │
+              └──────┬──────┘
+                     │
+                     ▼
+              SQLGenerationResult
+                │      │      │
+                │      │      └── tables_used
+                │      └───────── explanation
+                └──────────────── sql
+                     │
+                     ▼
+              execute_query()
+                     │
+                     ▼
+                PostgreSQL
+                     │
+                     ▼
+                  Result
+```
+
