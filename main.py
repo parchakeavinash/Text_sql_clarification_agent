@@ -1,5 +1,6 @@
 from app.agent.generator import generate_sql
 from app.agent.prompt import SYSTEM_PROMPT
+from app.agent.validator import validate_sql
 from app.database.connection import execute_query
 
 
@@ -19,6 +20,9 @@ def main():
         sql = generate_sql(
             question=question,
         )
+         # 2. Validate SQL
+        validated_sql = validate_sql(result.sql)
+
 
         print("\n Generating sql query...")
 
@@ -28,7 +32,7 @@ def main():
         #execut sql query
         print("\n Executing query...")
 
-        result = execute_query(sql)
+        result = execute_query(validated_sql)
 
         #step 3 display result
         print("\nResult")
@@ -38,9 +42,9 @@ def main():
             print("no result found..")
             return
 
-        for row in result:
-            print(row)
-
+        # for row in result:
+        #     print(row)
+        print(result)
     except Exception as e:
         print("\nError.")
         print(e)
