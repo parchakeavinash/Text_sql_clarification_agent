@@ -1,22 +1,26 @@
-from app.llm.manager import invoke_llm
+from app.llm.manager import get_llm
 from app.agent.prompt import SYSTEM_PROMPT
+from app.model import SQLGenerationResult
 
 
 def generate_sql(
     question: str,
     provider: str = "groq",
-) -> str:
+) -> SQLGenerationResult:
+
+    llm = get_llm(provider)
+
+    structured_llm = llm.with_structured_output(
+        SQLGenerationResult
+    )
 
     final_prompt = f"""
-{SYSTEM_PROMPT}
+    {SYSTEM_PROMPT}
 
-USER QUESTION:
-{question}
+    USER QUESTION:
+    {question}
+    """
 
-Return ONLY the PostgreSQL SELECT query.
-"""
+    result = structured_llm.invoke(final_prompt)
 
-    return invoke_llm(
-        prompt=final_prompt,
-        provider=provider,
-    )
+    return result
