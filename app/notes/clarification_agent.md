@@ -82,3 +82,60 @@ The question 'Who is the best customer?' is ambiguous because there are multiple
 
 CLARIFICATION:
 What do you mean by 'best customer'? Do you want to know the customer with the highest total revenue, the most orders, or the highest average order value?
+
+
+
+# another test
+========== CLASSIFICATION ==========
+clear
+
+========== REASONING ==========
+The question is clear and provides enough information to determine exactly what data should be queried, which is the number of orders placed last month.
+
+========== GENERATED SQL ==========
+SELECT COUNT(order_id) FROM orders WHERE EXTRACT(MONTH FROM order_date) = EXTRACT(MONTH FROM CURRENT_DATE - INTERVAL '1 month') AND EXTRACT(YEAR FROM order_date) = EXTRACT(YEAR FROM CURRENT_DATE - INTERVAL '1 month')
+
+========== VALIDATED SQL ==========
+SELECT COUNT(order_id) FROM orders WHERE EXTRACT(MONTH FROM order_date) = EXTRACT(MONTH FROM CURRENT_DATE - INTERVAL '1 month') AND EXTRACT(YEAR FROM order_date) = EXTRACT(YEAR FROM CURRENT_DATE - INTERVAL '1 month')
+
+========== FINAL RESULT ==========
+{'status': 'success', 'sql': "SELECT COUNT(order_id) FROM orders WHERE EXTRACT(MONTH FROM order_date) = EXTRACT(MONTH FROM CURRENT_DATE - INTERVAL '1 month') AND EXTRACT(YEAR FROM order_date) = EXTRACT(YEAR FROM CURRENT_DATE - INTERVAL '1 month')", 'explanation': 'This query calculates the number of orders placed last month by selectingthe count of order_id from the orders table where the order_date falls within the last month.', 'tables_used': ['orders'], 'data': [{'count': 100}]}
+
+
+current workflow we achieved
+
+                    User
+                     │
+                     ▼
+             Clarification Agent
+                     │
+        ┌────────────┼────────────┐
+        │            │            │
+      CLEAR      AMBIGUOUS    INCOMPLETE
+        │            │            │
+        │            ▼            ▼
+        │        Ask user      Ask user
+        │            │            │
+        │            └─────┬──────┘
+        │                  │
+        │          User clarification
+        │                  │
+        └──────────┬───────┘
+                   ▼
+             SQL Generator
+                   │
+                   ▼
+              SQLGenerationResult
+                   │
+                   ▼
+                SQLGlot
+                   │
+              ┌────┴────┐
+              │         │
+            Reject     Pass
+                        │
+                        ▼
+                   PostgreSQL
+                        │
+                        ▼
+                     Result
