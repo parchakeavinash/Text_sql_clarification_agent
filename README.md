@@ -265,6 +265,7 @@ Ambiguous question
 So this feature is complete. 🎯
 
 Already completed
+```
 ✅ PostgreSQL database
 ✅ E-commerce schema
 ✅ Realistic seed data
@@ -286,5 +287,6 @@ Already completed
 ✅ Interactive main.py
 ✅ Natural language response
 ✅ handles database empty result
+```
 
 ### still working on......
