@@ -33,6 +33,9 @@ def generate_natural_language_response(
     result,
     provider: str = "groq"
 ) ->str: 
+    
+    if not result:
+         return "No matching records were found."
 
     prompt = RESPONSE_PROMPT.format(
         question=question,
