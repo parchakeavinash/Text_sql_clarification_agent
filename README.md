@@ -227,4 +227,9 @@ Who is the best customer?
 Clarification:
 Highest total revenue.
 ```
+This is now a proper Clarification → Text-to-SQL → Validation → Execution pipeline.
 
+<img width="1627" height="486" alt="image" src="https://github.com/user-attachments/assets/87901ccf-7fc7-48eb-8dc2-2d046b586ff4" />
+
+
+<img width="1506" height="933" alt="image" src="https://github.com/user-attachments/assets/628b8265-8ea4-456b-8fda-249d2643f1fa" />
