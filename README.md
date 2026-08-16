@@ -1,4 +1,5 @@
 # Text-to-SQL with a Clarification Engine
+<img width="1152" height="411" alt="image" src="https://github.com/user-attachments/assets/7cf8d8b1-591b-4b8e-a85e-cca01561f15a" />
 
 > A production-oriented Text-to-SQL system that converts natural-language questions into PostgreSQL queries and, in later phases, intelligently asks for clarification when a user's question is ambiguous.
 
