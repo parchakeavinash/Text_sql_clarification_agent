@@ -233,3 +233,16 @@ This is now a proper Clarification → Text-to-SQL → Validation → Execution 
 
 
 <img width="1506" height="933" alt="image" src="https://github.com/user-attachments/assets/628b8265-8ea4-456b-8fda-249d2643f1fa" />
+
+
+## Natural-language response generation is now fully integrated
+```
+Direct question
+→ SQL → Validate → Execute → Natural Answer
+```
+and
+```
+Ambiguous question
+→ Clarification → SQL → Validate → Execute → Natural Answer
+```
+So this feature is complete. 🎯
