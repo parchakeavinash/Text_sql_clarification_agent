@@ -204,3 +204,27 @@ The prompt now explicitly tells the model:
                   Result
 ```
 
+clarification agent is actually working correctly
+currently this is how it works:
+```
+User Question
+      ↓
+Clarification Agent
+      ↓
+┌──────────┬────────────┬────────────┬─────────┐
+│  Clear   │ Ambiguous  │ Incomplete │ Invalid │
+└────┬─────┴─────┬──────┴──────┬─────┴────┬────┘
+     │           │             │           │
+     ↓           ↓             ↓           ↓
+Generate SQL   Ask user      Ask user    Reject
+```
+next step is too implement the conversation loop where we combined the original question with clarification question 
+like this 
+```
+Original:
+Who is the best customer?
+
+Clarification:
+Highest total revenue.
+```
+
