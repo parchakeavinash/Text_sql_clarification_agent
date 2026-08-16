@@ -1,9 +1,10 @@
-from app.agent import clarification
 from app.agent.clarification import classify_question
 from app.agent.generator import generate_sql
 from app.agent.validator import validate_sql
 from app.database.connection import execute_query
-from app.model import ConversationState
+# from app.model import ConversationState
+from app.agent.response import generate_natural_language_response
+
 
 def run_agent(
     question: str,
@@ -57,10 +58,12 @@ def run_agent(
 
     # execute sql
     database_result = execute_query(validated_sql)
-    return {
-        "status": "success",
-        "sql": validated_sql,
-        "explanation": result.explanation,
-        "tables_used": result.tables_used,
-        "data": database_result,
-    }
+
+    answer = generate_natural_language_response(
+        question=question,
+        sql=validated_sql,
+        result=database_result,
+        provider=provider,
+    )
+
+    return answer

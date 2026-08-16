@@ -14,6 +14,36 @@ def get_llm(provider: str = "groq"):
         "provider must be either 'groq' or 'gemini'"
     )
 
+def generate_response(
+    prompt:str,
+    provider: str = "groq",
+)->str:
+
+    llm = groq_llm if provider == "groq" else gemini_llm
+
+    try:
+        response = llm.invoke(prompt)
+
+        return response.content.strip()
+
+    except Exception as primary_error:
+
+        if provider == "groq":
+            try:
+                response = gemini_llm.invoke(prompt)
+                return response.content.strip()
+
+            except Exception as fallback_error:
+                raise RuntimeError(
+                    f"LLM generation failed. "
+                    f"Primary error: {primary_error}; "
+                    f"Fallback error: {fallback_error}"
+                )
+
+        raise RuntimeError(
+            f"LLM generation failed: {primary_error}"
+        )
+
 
 def invoke_llm(prompt: str, provider: str = "groq") -> str:
     """Invoke an LLM and return text."""
