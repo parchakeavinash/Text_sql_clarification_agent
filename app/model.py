@@ -21,12 +21,14 @@ class ClarificationResult(BaseModel):
         "ambiguous",
         "incomplete",
         "invalid",
-    ] = Field(
-        description="Classification of the user's question."
-    )
+    ]
     
-    reasoning: str = Field(description="Brief explanation of why the question has this classification.")
 
-    clarification_question : str = Field(default='',
-    description="A concise clarification question. "
-            "For clear or invalid questions, return an empty string.")
+    reasoning: str
+
+    clarification_question : str
+# this will hold the converstation
+class ConversationState(BaseModel):
+    original_qestion: str
+    clarification_question: str = ""
+    clarification_answer: str = ""

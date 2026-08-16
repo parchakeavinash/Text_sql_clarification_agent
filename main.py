@@ -1,55 +1,68 @@
-from app.agent.generator import generate_sql
-from app.agent.prompt import SYSTEM_PROMPT
-from app.agent.validator import validate_sql
-from app.database.connection import execute_query
+from app.agent.orchestrator import run_agent
+from app.agent.conversation import resolve_clarification
 
 
 def main():
-    print("="*50)
-    print("      Text-to-sql-Agent")
-    print("="*50)
+    print("="*60)
+    print("       E-COMMERCE TEXT-TO-SQL AGENT")
+    print("="*60)
 
-    question = input("\nAsk a question: ").strip()
+    while True:
 
-    if not question:
-        print("Please enter a question")
-        return 
+        question = input("\nYou: ").strip()
 
-    try:
-        #generate sql
-        sql = generate_sql(
-            question=question,
+        if question.lower() in ['exit','quite','q']:
+            print('\nGoodbye!')
+            break
+
+        if not question:
+            print('Please enter a question.')
+            continue
+
+        result = run_agent(
+            question= question,
+            provider='groq',
         )
-         # 2. Validate SQL
-        validated_sql = validate_sql(result.sql)
 
+        if result['status'] ==['invalid']:
+            print('\nAgent:')
+            print(result['message'])
+            continue
 
-        print("\n Generating sql query...")
+        if result['status'] == 'needs_clarification':
+            
+            clarification_question = result['question']
 
-        print("="*50)
-        print(sql)
+            print('\nAgent:')
+            print(clarification_question)
 
-        #execut sql query
-        print("\n Executing query...")
+            # ask user for clarification
+            user_answer = input("\nYou: ").strip()
 
-        result = execute_query(validated_sql)
+            if not user_answer:
+                print('Please provide a clarification.')
+                continue
 
-        #step 3 display result
-        print("\nResult")
-        print("="*50)
+            # resolve clarification
+            final_result = resolve_clarification(
+                original_question=question,
+                clarification_question=clarification_question,
+                user_answer= user_answer,
+                provider='groq'
+            )
 
-        if not result:
-            print("no result found..")
-            return
+            if result['status'] == 'success':
+                print("\n========== SQL ==========")
+                print(result["sql"])
 
-        # for row in result:
-        #     print(row)
-        print(result)
-    except Exception as e:
-        print("\nError.")
-        print(e)
+                print("\n========== EXPLANATION ==========")
+                print(result["explanation"])
 
+                print("\n========== TABLES USED ==========")
+                print(result["tables_used"])
 
+                print("\n========== DATABASE RESULT ==========")
+                print(result["data"])
 
-if __name__ =="__main__":
+if __name__ =='__main__':
     main()
