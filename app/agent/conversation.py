@@ -1,8 +1,7 @@
-from app.agent.clarification import classify_question
 from app.agent.generator import generate_sql
 from app.agent.validator import validate_sql
 from app.database.connection import execute_query
-
+from app.agent.response import generate_natural_language_response
 
 def resolve_clarification(
     original_question: str,
@@ -47,10 +46,11 @@ User's clarification:
 
     database_result = execute_query(validated_sql)
 
-    return {
-        "status": "success",
-        "sql": validated_sql,
-        "explanation": result.explanation,
-        "tables_used": result.tables_used,
-        "data": database_result,
-    }
+    answer = generate_natural_language_response(
+        question=combined_question,
+        sql=validated_sql,
+        result=database_result,
+        provider=provider,
+    )
+
+    return answer
