@@ -237,6 +237,21 @@ This is now a proper Clarification → Text-to-SQL → Validation → Execution 
 
 ## Natural-language response generation is now fully integrated
 ```
+User question
+      ↓
+Clarification
+      ↓
+User answer
+      ↓
+SQL generation
+      ↓
+Validation
+      ↓
+Database
+      ↓
+Natural-language response
+
+```
 Direct question
 → SQL → Validate → Execute → Natural Answer
 ```
